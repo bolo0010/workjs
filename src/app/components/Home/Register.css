@@ -1,0 +1,39 @@
+.register {
+    width: 90%;
+    margin: 1rem auto;
+}
+
+.register .hstack div {
+    width: 100%;
+}
+
+.register .register__buttons {
+    margin-top: 1rem;
+}
+
+.register .register__checkboxes {
+    margin: 1rem 0;
+}
+
+.register__checkboxes .register__checkboxes-container {
+    display: inline-block;
+    border: 1px solid gray;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.register__checkboxes-title {
+    margin-right: 1rem;
+}
+
+.register__remove-link {
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+}
+
+.register__remove-link:hover {
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+}
