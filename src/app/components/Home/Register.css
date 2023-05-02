@@ -1,5 +1,5 @@
 .register {
-    width: 90%;
+    width: 95%;
     margin: 1rem auto;
 }
 
@@ -36,4 +36,8 @@
     text-decoration: none;
     color: white;
     background-color: transparent;
+}
+
+.register__required {
+    color: red;
 }
