@@ -6,6 +6,7 @@ import NotFound from "./components/partials/NotFound/NotFound";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import Register from "./components/Home/Register";
+import Profile from "./components/Profile/Profile";
 
 const router = createBrowserRouter([
     {
@@ -23,8 +24,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/profile",
-        // element: <Profile />,
-        element: "asd",
+        element: <Profile />,
     },
     {
         path: "/*",
