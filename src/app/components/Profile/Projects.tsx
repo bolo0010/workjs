@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {Card, Col, Row, Tab} from "react-bootstrap";
-import {ProjectInProfile} from "../../../types/interfaces";
+import {ProjectInProfile, StudentProjectsProps} from "../../../types/interfaces";
 
-const Projects = () => {
+const Projects = ({id}: StudentProjectsProps) => {
     const [projects, setProjects] = useState<ProjectInProfile[]>([{
         id: 1,
         name: "Projekt 1",

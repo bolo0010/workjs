@@ -91,8 +91,8 @@ const Register = () => {
                                 <Accordion.Item eventKey={id.toString()} key={`technology_${id}_accordion`}>
                                     <Accordion.Header>{name}{requiredInput}</Accordion.Header>
                                     <Accordion.Body>
-                                            <Form.Label className='mb-2'>Ocena wiedzy w skali 1 - 5 (0 - brak, 5 - ekspercka){requiredInput}</Form.Label>
-                                            <Form.Control type="number" required={true} max={5} min={0} name={`technology_${id}_knowledge_accordion`}/>
+                                            <Form.Label className='mb-2'>Ocena wiedzy w skali 0 - 5 (0 - brak, 5 - ekspercka){requiredInput}</Form.Label>
+                                            <Form.Control type="number" required={true} max={5} min={0} name={`technology_${id}_knowledge_accordion`} defaultValue={0}/>
                                             <Form.Label className='mb-2 mt-2'>Opis umiejętności</Form.Label>
                                             <Form.Control as='textarea' rows={3} required={false} name={`technology_${id}_description_accordion`}/>
                                     </Accordion.Body>

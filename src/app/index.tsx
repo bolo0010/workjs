@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import Register from "./components/Home/Register";
 import Profile from "./components/Profile/Profile";
+import MainList from "./components/Lists/MainList";
+import List from "./components/Lists/List";
 
 const router = createBrowserRouter([
     {
@@ -19,8 +21,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/list",
-        // element: <List />,
-        element: "asd",
+        element: <List />,
     },
     {
         path: "/profile",
