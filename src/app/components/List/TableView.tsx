@@ -3,7 +3,6 @@ import {Button} from "react-bootstrap";
 import React from "react";
 import {TableViewProps} from "../../../types/interfaces";
 import './TableView.css';
-import {ListType} from "../../../types/enums";
 
 const TableView = ({student_list, list_type, setSelectedStudent, changeTab}: TableViewProps) => {
     return (
@@ -22,9 +21,6 @@ const TableView = ({student_list, list_type, setSelectedStudent, changeTab}: Tab
             <tbody>
             {
                 student_list.map(student => {
-                        const deleteFromPrivateListButton = <Button className='btn-sm' variant="primary" onClick={() => {
-                        }}>Usuń z listy</Button>
-
                         return (
                             <tr key={student.id + "_" + list_type}>
                                 <td>{student.first_name}</td>
@@ -44,7 +40,6 @@ const TableView = ({student_list, list_type, setSelectedStudent, changeTab}: Tab
                                         })
                                         changeTab('profile_student_in_list')
                                     }}>Wyświetl profil</Button>
-                                    {list_type === ListType.private ? deleteFromPrivateListButton : null}
                                 </td>
                             </tr>
                         )

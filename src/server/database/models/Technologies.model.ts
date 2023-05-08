@@ -3,7 +3,9 @@ import {ENUM, Optional} from "sequelize";
 import {TechnologiesModel} from "../../../types/interfaces";
 import {TechnologiesTypes} from "../../../types/enums";
 
-interface TechnologiesModelCreation extends Optional<TechnologiesModel, 'id'> {}
+interface TechnologiesModelCreation extends Optional<TechnologiesModel, 'id'> {
+}
+
 @Table({
     freezeTableName: true,
     tableName: 'technologies',
@@ -16,7 +18,7 @@ class Technologies extends Model<TechnologiesModelCreation, TechnologiesModel> {
     @Column(DataType.INTEGER)
     id!: number;
 
-    @Length({min:1, max: 200})
+    @Length({min: 1, max: 200})
     @AllowNull(false)
     @Column(DataType.STRING)
     name!: string;

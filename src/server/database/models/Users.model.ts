@@ -15,14 +15,16 @@ import {
     Table,
     Unique
 } from 'sequelize-typescript';
-import {ENUM, Optional} from "sequelize";
+import {ENUM, Optional, UUIDV4} from "sequelize";
 import Projects from "./Projects.model";
 import RecruiterData from "./RecruiterData.model";
 import StudentData from "./StudentData.model";
 import {UsersModel} from "../../../types/interfaces";
 import {AccountType} from "../../../types/enums";
 
-interface UsersModelCreation extends Optional<UsersModel, 'id'> {}
+interface UsersModelCreation extends Optional<UsersModel, 'id' | 'id_student_data' | 'id_recruiter_data'> {
+}
+
 @Table({
     freezeTableName: true,
     tableName: 'users',
@@ -32,27 +34,28 @@ class Users extends Model<UsersModel, UsersModelCreation> {
     @PrimaryKey
     @AllowNull(false)
     @IsUUID(4)
+    @Default(UUIDV4)
     @Column(DataType.STRING)
     id!: string;
 
-    @Length({min:1, max: 50})
+    @Length({min: 1, max: 50})
     @AllowNull(false)
     @Column(DataType.STRING)
     first_name!: string;
 
-    @Length({min:1, max: 75})
+    @Length({min: 1, max: 75})
     @AllowNull(false)
     @Column(DataType.STRING)
     second_name!: string;
 
-    @Length({min:1, max: 100})
+    @Length({min: 1, max: 100})
     @AllowNull(false)
     @IsEmail
     @Unique(true)
     @Column(DataType.STRING)
     email!: string;
 
-    @Length({min:9, max: 9})
+    @Length({min: 9, max: 9})
     @AllowNull(false)
     @Unique(true)
     @Column(DataType.STRING)
@@ -68,12 +71,12 @@ class Users extends Model<UsersModel, UsersModelCreation> {
     @Column(ENUM<AccountType>(AccountType.student, AccountType.recruiter))
     account_type!: AccountType;
 
-    @Length({min:128, max: 128})
+    @Length({min: 128, max: 128})
     @AllowNull(false)
     @Column(DataType.CHAR)
     hash!: string;
 
-    @Length({min:64, max: 64})
+    @Length({min: 64, max: 64})
     @AllowNull(false)
     @Column(DataType.CHAR)
     salt!: string;
@@ -82,13 +85,13 @@ class Users extends Model<UsersModel, UsersModelCreation> {
     @ForeignKey(() => StudentData)
     @IsUUID(4)
     @Column(DataType.STRING)
-    id_student_data?: string;
+    id_student_data!: string | null;
 
     @AllowNull(true)
     @ForeignKey(() => RecruiterData)
     @IsUUID(4)
     @Column(DataType.STRING)
-    id_recruiter_data?: string;
+    id_recruiter_data!: string | null;
 
     @BelongsTo(() => StudentData, "id_student_data")
     student_data!: StudentData;

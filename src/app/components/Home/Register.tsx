@@ -1,187 +1,255 @@
-import React, {useRef, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import './Register.css'
-import {Accordion, Button, Form, Stack} from "react-bootstrap";
-import {Link} from "react-router-dom";
-import {AccountType, TechnologiesTypes} from "../../../types/enums";
-import {TechnologiesModel} from "../../../types/interfaces";
+import {Button, Form, Stack} from "react-bootstrap";
+import {Link, useNavigate} from "react-router-dom";
+import {AccountType} from "../../../types/enums";
+import {
+    PostDataCreateUser,
+    RegisterState,
+    RegisterStateRecruiter,
+    RegisterStateStudent,
+    RegisterStateTechnology,
+    TechnologiesModel,
+} from "../../../types/interfaces";
+import RecruiterData from "./RecruiterData";
+import StudentData from "./StudentData";
+import axios, {AxiosResponse} from "axios";
+import Message from "../partials/Message/Message";
+import {API_URL} from "../../config/api_url";
 
 const Register = () => {
+    const navigate = useNavigate();
+
     const [radioButtonAccountType, setRadioButtonAccountType] = useState<AccountType>();
-    const [technologies, setTechnologies] = useState<TechnologiesModel[]>([
-        {
-            id: 1,
-            name: "React",
-            type: TechnologiesTypes.framework
-        },
-        {
-            id: 2,
-            name: "Express",
-            type: TechnologiesTypes.library
-        },
-    ]);
+    const [registerCommonData, setRegisterCommonData] = useState<RegisterState>({
+        first_name: '',
+        second_name: '',
+        email: '',
+        phone_number: '',
+        password1: '',
+        password2: ''
+    });
+    const [registerStudentData, setRegisterStudentData] = useState<RegisterStateStudent>({
+        university: '',
+        field: '',
+        about: '',
+        work_experience: '',
+        certificates: '',
+        practices: '',
+        courses: '',
+        activities: '',
+        hobby: '',
+        languages: '',
+        expected_graduation_date: new Date()
+    });
+    const [registerRecruiterData, setRegisterRecruiterData] = useState<RegisterStateRecruiter>({
+        organisation: '',
+        position: '',
+        organisation_link: ''
+    });
+    const [registerTechnologyData, setRegisterTechnologyData] = useState<RegisterStateTechnology[]>([])
+    const [technologies, setTechnologies] = useState<TechnologiesModel[]>([]);
+    const [message, setMessage] = useState<string>('');
+
+    useEffect(() => {
+        getTechnologies();
+    }, [])
+
+    useEffect(() => {
+        setRegisterTechnologyData(technologies.map(technologies => ({
+            id_technology: technologies.id,
+            knowledge: 0,
+            skills: ''
+        })))
+    }, [technologies])
+
+    const getTechnologies = async () => {
+        try {
+            const response: AxiosResponse<TechnologiesModel[]> = await axios({
+                method: 'GET',
+                url: `${API_URL}api/technologies`
+            });
+            setTechnologies(response.data);
+        } catch (err: any) {
+            setMessage(err.response.data.message || err.message);
+        }
+    }
+
+    const checkPassword = (): boolean => {
+        if (registerCommonData.password1 !== registerCommonData.password2) {
+            setMessage("Hasła nie są identyczne.");
+            window.scrollTo(0, 0);
+            return false
+        }
+
+        const reg = new RegExp("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$");
+        if (!registerCommonData.password1.match(reg)) {
+            setMessage("Wymagania dotyczące hasła nie zostały spełnione.");
+            window.scrollTo(0, 0);
+            return false
+        }
+
+        return true;
+    }
+
+    const postUser = async (e: FormEvent) => {
+        e.preventDefault();
+        if (!checkPassword()) return;
+        if (!radioButtonAccountType) return;
+
+        const postData: PostDataCreateUser = {
+            first_name: registerCommonData.first_name,
+            second_name: registerCommonData.second_name,
+            email: registerCommonData.email,
+            phone_number: registerCommonData.phone_number,
+            account_type: radioButtonAccountType,
+            password: registerCommonData.password1,
+            university: registerStudentData.university,
+            field: registerStudentData.field,
+            about: registerStudentData.about,
+            work_experience: registerStudentData.work_experience,
+            certificates: registerStudentData.certificates,
+            practices: registerStudentData.practices,
+            courses: registerStudentData.courses,
+            activities: registerStudentData.activities,
+            hobby: registerStudentData.hobby,
+            languages: registerStudentData.languages,
+            expected_graduation_date: registerStudentData.expected_graduation_date,
+            organisation: registerRecruiterData.organisation,
+            position: registerRecruiterData.position,
+            organisation_link: registerRecruiterData.organisation_link,
+            technologies: registerTechnologyData.filter(technology => technology.knowledge > 0)
+        }
+
+        try {
+            await axios({
+                method: 'POST',
+                url: `${API_URL}api/users`,
+                data: postData
+            });
+            navigate('/', {state: {successful_register: "Zarejestrowano pomyślnie."}, replace: true});
+        } catch (err: any) {
+            setMessage(err.response.data.message || err.message);
+            window.scrollTo(0, 0);
+        }
+    }
+
 
     const requiredInput = (
         <span className='register__required'>*</span>
     )
-
-    const recruiter_data: JSX.Element = (
+    return (
         <>
-            <Form.Group className="mb-3" controlId="formOrganisation">
-                <Form.Label className="fs-4">Nazwa organizacji{requiredInput}</Form.Label>
-                <Form.Control type="text" placeholder="ABC sp z o.o." required={true}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formPosition">
-                <Form.Label className="fs-4">Stanowisko{requiredInput}</Form.Label>
-                <Form.Control type="text" placeholder="Rekruter" required={true}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formOrganisationLink">
-                <Form.Label className="fs-4">Link do organizacji{requiredInput}</Form.Label>
-                <Form.Control type="url" placeholder="https://abc.pl" required={true}/>
-            </Form.Group>
-        </>
-    )
-
-    const student_data: JSX.Element = (
-        <>
-            <Form.Group className="mb-3" controlId="formUniversity">
-                <Form.Label className="fs-4">Nazwa szkoły wyższej{requiredInput}</Form.Label>
-                <Form.Control type="text" placeholder="Uniwersytet Łódzki" required={true}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formField">
-                <Form.Label className="fs-4">Kierunek{requiredInput}</Form.Label>
-                <Form.Control type="text" placeholder="Informatyka Ekonomiczna" required={true}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formAbout">
-                <Form.Label className="fs-4">O mnie{requiredInput}</Form.Label>
-                <Form.Control as='textarea' rows={3} required={true}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formWorkExperience">
-                <Form.Label className="fs-4">Doświadczenie zawodowe</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formCertificates">
-                <Form.Label className="fs-4">Certyfikaty</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formPractices">
-                <Form.Label className="fs-4">Praktyki</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formCourses">
-                <Form.Label className="fs-4">Kursy</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formActivites">
-                <Form.Label className="fs-4">Aktywność studencka</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formHobbies">
-                <Form.Label className="fs-4">Hobby i zainteresowania</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formLanguages">
-                <Form.Label className="fs-4">Języki obce</Form.Label>
-                <Form.Control as='textarea' rows={3} required={false}/>
-            </Form.Group>
-            <div className="register__technologies">
-                <div className="fs-4 mb-3">Technologie</div>
-                    <Accordion>
-                        {
-                            technologies.map(({id, name}) =>
-                                <Accordion.Item eventKey={id.toString()} key={`technology_${id}_accordion`}>
-                                    <Accordion.Header>{name}{requiredInput}</Accordion.Header>
-                                    <Accordion.Body>
-                                            <Form.Label className='mb-2'>Ocena wiedzy w skali 0 - 5 (0 - brak, 5 - ekspercka){requiredInput}</Form.Label>
-                                            <Form.Control type="number" required={true} max={5} min={0} name={`technology_${id}_knowledge_accordion`} defaultValue={0}/>
-                                            <Form.Label className='mb-2 mt-2'>Opis umiejętności</Form.Label>
-                                            <Form.Control as='textarea' rows={3} required={false} name={`technology_${id}_description_accordion`}/>
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            )
-                        }
-                    </Accordion>
+            {message ? <Message message={message} title='Informacja' time={5000}/> : null}
+            <div className="register">
+                <Form onSubmit={postUser}>
+                    <h2>1. Podstawowe dane</h2>
+                    <Stack direction="horizontal" gap={3}>
+                        <Form.Group className="mb-3" controlId="formFirstName">
+                            <Form.Label className="fs-4">Imię{requiredInput}</Form.Label>
+                            <Form.Control type="text" placeholder="Jan" required={true}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterCommonData({
+                                              ...registerCommonData,
+                                              first_name: e.target.value
+                                          })}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formSecondName">
+                            <Form.Label className="fs-4">Nazwisko{requiredInput}</Form.Label>
+                            <Form.Control type="text" placeholder="Kowalski" required={true}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterCommonData({
+                                              ...registerCommonData,
+                                              second_name: e.target.value
+                                          })}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label className="fs-4">Adres email{requiredInput}</Form.Label>
+                            <Form.Control type="email" placeholder="xyz@gmail.com" required={true}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterCommonData({
+                                              ...registerCommonData,
+                                              email: e.target.value
+                                          })}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formPhoneNumber">
+                            <Form.Label className="fs-4">Numer telefonu{requiredInput}</Form.Label>
+                            <Form.Control type="text" placeholder="123456789" required={true} minLength={9}
+                                          maxLength={9}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterCommonData({
+                                              ...registerCommonData,
+                                              phone_number: e.target.value
+                                          })}/>
+                        </Form.Group>
+                    </Stack>
+                    <Stack direction="horizontal" gap={3}>
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label className="fs-4">Hasło{requiredInput}</Form.Label>
+                            <Form.Control type="password" placeholder="Podaj hasło" required={true} minLength={8}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterCommonData({
+                                              ...registerCommonData,
+                                              password1: e.target.value
+                                          })}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicPasswordRepeat">
+                            <Form.Label className="fs-4">Powtórz hasło{requiredInput}</Form.Label>
+                            <Form.Control type="password" placeholder="Podaj ponownie hasło" required={true}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterCommonData({
+                                              ...registerCommonData,
+                                              password2: e.target.value
+                                          })}/>
+                        </Form.Group>
+                    </Stack>
+                    <Form.Text className="text-muted">
+                        Wymagane jest hasło składające się minimalnie z 8 znaków, zawierające małe i duże litery oraz
+                        cyfry.
+                    </Form.Text>
+                    <h2 className="mt-2 mb-2">2. Dane użytkownika</h2>
+                    <div className='register__checkboxes'>
+                        <div className="register__checkboxes-container">
+                            <span className='register__checkboxes-title'>Jestem{requiredInput}</span>
+                            <Form.Check
+                                type='radio'
+                                inline
+                                id='formAccountTypeStudentCheckbox'
+                                name='formAccountTypeCheckbox'
+                                label='studentem'
+                                value={AccountType.student}
+                                checked={radioButtonAccountType === AccountType.student}
+                                onChange={() => setRadioButtonAccountType(AccountType.student)}
+                                required
+                            />
+                            <Form.Check
+                                type='radio'
+                                inline
+                                id='formAccountTypeRecruiterCheckbox'
+                                name='formAccountTypeCheckbox'
+                                label='rekruterem'
+                                value={AccountType.recruiter}
+                                checked={radioButtonAccountType === AccountType.recruiter}
+                                onChange={() => setRadioButtonAccountType(AccountType.recruiter)}
+                                required
+                            />
+                        </div>
+                    </div>
+                    {radioButtonAccountType === AccountType.recruiter ?
+                        <RecruiterData registerRecruiterData={registerRecruiterData}
+                                       setRegisterRecruiterData={setRegisterRecruiterData}/> : radioButtonAccountType === AccountType.student ?
+                            <StudentData technologies={technologies} registerTechnologyData={registerTechnologyData}
+                                         setRegisterTechnologyData={setRegisterTechnologyData}
+                                         registerStudentData={registerStudentData}
+                                         setRegisterStudentData={setRegisterStudentData}/> : null}
+                    <Form.Text className="text-muted">
+                        Pola oznaczonone {requiredInput} są wymagane.
+                    </Form.Text>
+                    <Stack direction="horizontal" className='register__buttons'>
+                        <Button variant="primary" type="submit">
+                            Zarejestruj mnie
+                        </Button>
+                        <Button variant="primary" type="button" className="ms-auto">
+                            <Link to='/' className='register__remove-link'>Cofnij</Link>
+                        </Button>
+                    </Stack>
+                </Form>
             </div>
         </>
-    )
-
-    return (
-        <div className="register">
-            <Form>
-                <h2>1. Podstawowe dane</h2>
-                <Stack direction="horizontal" gap={3}>
-                    <Form.Group className="mb-3" controlId="formFirstName">
-                        <Form.Label className="fs-4">Imię{requiredInput}</Form.Label>
-                        <Form.Control type="text" placeholder="Jan" required={true}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formSecondName">
-                        <Form.Label className="fs-4">Nazwisko{requiredInput}</Form.Label>
-                        <Form.Control type="text" placeholder="Kowalski" required={true}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="fs-4">Adres email{requiredInput}</Form.Label>
-                        <Form.Control type="email" placeholder="xyz@gmail.com" required={true}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formPhoneNumber">
-                        <Form.Label className="fs-4">Numer telefonu{requiredInput}</Form.Label>
-                        <Form.Control type="text" placeholder="123456789" required={true} minLength={9} maxLength={9}/>
-                    </Form.Group>
-                </Stack>
-                <Stack direction="horizontal" gap={3}>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label className="fs-4">Hasło{requiredInput}</Form.Label>
-                        <Form.Control type="password" placeholder="Podaj hasło" required={true} minLength={8}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicPasswordRepeat">
-                        <Form.Label className="fs-4">Powtórz hasło{requiredInput}</Form.Label>
-                        <Form.Control type="password" placeholder="Podaj ponownie hasło" required={true}/>
-                    </Form.Group>
-                </Stack>
-                <Form.Text className="text-muted">
-                    Wymagane jest hasło składające się minimalnie z 8 znaków, zawierające małe i duże litery oraz
-                    cyfry.
-                </Form.Text>
-                <h2 className="mt-2 mb-2">2. Dane użytkownika</h2>
-                <div className='register__checkboxes'>
-                    <div className="register__checkboxes-container">
-                        <span className='register__checkboxes-title'>Jestem{requiredInput}</span>
-                        <Form.Check
-                            type='radio'
-                            inline
-                            id='formAccountTypeStudentCheckbox'
-                            name='formAccountTypeCheckbox'
-                            label='studentem'
-                            value={AccountType.student}
-                            checked={radioButtonAccountType === AccountType.student}
-                            onChange={() => setRadioButtonAccountType(AccountType.student)}
-                            required
-                        />
-                        <Form.Check
-                            type='radio'
-                            inline
-                            id='formAccountTypeRecruiterCheckbox'
-                            name='formAccountTypeCheckbox'
-                            label='rekruterem'
-                            value={AccountType.recruiter}
-                            checked={radioButtonAccountType === AccountType.recruiter}
-                            onChange={() => setRadioButtonAccountType(AccountType.recruiter)}
-                            required
-                        />
-                    </div>
-                </div>
-                {radioButtonAccountType === AccountType.recruiter ? recruiter_data : radioButtonAccountType === AccountType.student ? student_data : null}
-                <Form.Text className="text-muted">
-                    Pola oznaczonone {requiredInput} są wymagane.
-                </Form.Text>
-                <Stack direction="horizontal" className='register__buttons'>
-                    <Button variant="primary" type="submit">
-                        Zarejestruj mnie
-                    </Button>
-                    <Button variant="primary" type="button" className="ms-auto">
-                        <Link to='/' className='register__remove-link'>Cofnij</Link>
-                    </Button>
-                </Stack>
-            </Form>
-        </div>
     );
 }
 

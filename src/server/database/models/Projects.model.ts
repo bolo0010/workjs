@@ -15,7 +15,9 @@ import {Optional, UUIDV4} from "sequelize";
 import Users from "./Users.model";
 import {ProjectsModel} from "../../../types/interfaces";
 
-interface ProjectsModelCreation extends Optional<ProjectsModel, 'id'> {}
+interface ProjectsModelCreation extends Optional<ProjectsModel, 'id'> {
+}
+
 @Table({
     freezeTableName: true,
     tableName: 'projects',
@@ -33,9 +35,9 @@ class Projects extends Model<ProjectsModel, ProjectsModelCreation> {
     @ForeignKey(() => Users)
     @IsUUID(4)
     @Column(DataType.STRING)
-    id_student?: string;
+    id_student!: string;
 
-    @Length({min:1, max: 200})
+    @Length({min: 1, max: 200})
     @AllowNull(false)
     @Column(DataType.STRING)
     name!: string;
@@ -44,13 +46,13 @@ class Projects extends Model<ProjectsModel, ProjectsModelCreation> {
     @Column(DataType.TEXT)
     description!: string;
 
-    @Length({min:1, max: 2048})
+    @Length({min: 1, max: 2048})
     @AllowNull(false)
     @IsUrl
     @Column(DataType.STRING)
     demo_link!: string;
 
-    @Length({min:1, max: 2048})
+    @Length({min: 1, max: 2048})
     @AllowNull(false)
     @IsUrl
     @Column(DataType.STRING)

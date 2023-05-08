@@ -17,7 +17,9 @@ import StudentDataTechnologies from "./StudentDataTechnologies.model";
 import Technologies from "./Technologies.model";
 import {StudentDataModel} from "../../../types/interfaces";
 
-interface StudentDataModelCreation extends Optional<StudentDataModel, 'id'> {}
+interface StudentDataModelCreation extends Optional<StudentDataModel, 'id'> {
+}
+
 @Table({
     freezeTableName: true,
     tableName: 'student_data',
@@ -32,12 +34,12 @@ class StudentData extends Model<StudentDataModel, StudentDataModelCreation> {
     @Column(DataType.STRING)
     id!: string;
 
-    @Length({min:1, max: 200})
+    @Length({min: 1, max: 200})
     @AllowNull(false)
     @Column(DataType.STRING)
     university!: string;
 
-    @Length({min:1, max: 200})
+    @Length({min: 1, max: 200})
     @AllowNull(false)
     @Column(DataType.STRING)
     field!: string;
@@ -46,31 +48,31 @@ class StudentData extends Model<StudentDataModel, StudentDataModelCreation> {
     @Column(DataType.TEXT)
     about!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     work_experience!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     certificates!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     practices!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     courses!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     activities!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     hobby!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     languages!: string;
 

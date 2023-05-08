@@ -3,12 +3,12 @@ export interface StudentDataModel {
     university: string;
     field: string;
     about: string;
-    work_experience: string;
-    certificates: string;
-    practices: string;
-    courses: string;
-    activities: string;
-    hobby: string;
-    languages: string;
+    work_experience?: string | null;
+    certificates?: string | null;
+    practices?: string | null;
+    courses?: string | null;
+    activities?: string | null;
+    hobby?: string | null;
+    languages?: string | null;
     expected_graduation_date: Date;
 }

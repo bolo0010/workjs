@@ -15,10 +15,13 @@ import Technologies from "./Technologies.model";
 import StudentData from "./StudentData.model";
 import {StudentDataTechnologiesModel} from '../../../types/interfaces';
 
-interface StudentDataTechnologiesModelCreation extends Optional<StudentDataTechnologiesModel, 'id'> {}
+interface StudentDataTechnologiesModelCreation extends Optional<StudentDataTechnologiesModel, 'id' | 'skills'> {
+}
+
 @Table({
     freezeTableName: true,
     tableName: 'student_data_technologies',
+    initialAutoIncrement: '1',
     timestamps: false
 })
 class StudentDataTechnologies extends Model<StudentDataTechnologiesModel, StudentDataTechnologiesModelCreation> {
@@ -32,7 +35,7 @@ class StudentDataTechnologies extends Model<StudentDataTechnologiesModel, Studen
     @Column(DataType.INTEGER)
     knowledge!: number;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
     skills!: string;
 

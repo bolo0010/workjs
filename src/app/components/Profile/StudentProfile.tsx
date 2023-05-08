@@ -1,204 +1,246 @@
-import {Accordion, Card, Col, Row, Tab} from "react-bootstrap";
-import React, {useState} from "react";
-import {StudentProfileProps, TechnologyInProfile} from "../../../types/interfaces";
+import {Accordion, Card, Col, Row, Spinner, Tab} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {StudentProfileData, StudentProfileProps, TechnologyInProfile} from "../../../types/interfaces";
+import Message from "../partials/Message/Message";
+import axios, {AxiosResponse} from "axios";
+import {API_URL} from "../../config/api_url";
 
 const StudentProfile = ({id}: StudentProfileProps) => {
-    const [technologies, setTechnologies] = useState<TechnologyInProfile[]>([
-        {
-            id: 1,
-            name: 'React',
-            knowledge: 3,
-            description: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentiumvoluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sintoccaecati cupiditate non provident, similique sunt in culpa qui officia deseruntmollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et"
+    const [technologies, setTechnologies] = useState<TechnologyInProfile[]>([]);
+    const [studentData, setStudentData] = useState<StudentProfileData>({
+        first_name: '',
+        second_name: '',
+        email: '',
+        phone_number: '',
+        id_student_data: '',
+        student_data: {
+            university: '',
+            field: '',
+            about: '',
+            work_experience: null,
+            certificates: null,
+            practices: null,
+            courses: null,
+            activities: null,
+            hobby: null,
+            languages: null,
+            expected_graduation_date: new Date()
         }
-    ]);
+    });
+    const [message, setMessage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        getStudentProfile()
+    }, [id])
+
+    useEffect(() => {
+        getStudentTechnologies();
+        setLoading(false);
+    }, [studentData.id_student_data])
+
+    const getStudentProfile = async () => {
+        if (!id) return;
+        try {
+            const response: AxiosResponse<StudentProfileData> = await axios({
+                method: 'GET',
+                url: `${API_URL}api/users/${id}`,
+                withCredentials: true,
+            })
+            if (response.status === 200)
+                setStudentData(response.data)
+        } catch (err: any) {
+            setMessage(err.response.data.message || err.message);
+        }
+    }
+
+    const getStudentTechnologies = async () => {
+        if (!studentData.id_student_data) return;
+        try {
+            const response: AxiosResponse<TechnologyInProfile[]> = await axios({
+                method: 'GET',
+                url: `${API_URL}api/technologies/${studentData.id_student_data}`,
+                withCredentials: true,
+            })
+            if (response.status === 200)
+                setTechnologies(response.data)
+        } catch (err: any) {
+            setMessage(err.response.data.message || err.message);
+        }
+    }
+
+    const emptyField = (
+        <span className='text-muted'>Nie wypełniono</span>
+    )
+
+    if (loading) return <Spinner animation="border"/>;
 
     return (
-        <Tab.Container>
-            <Row className='w-100'>
-                <Col>
-                    <h2>Artur Masłowski</h2>
-                </Col>
-                <Col className='text-end'>
-                    <h2>Uniwersytet Łódzki</h2>
-                </Col>
-            </Row>
-            <Row className='w-100'>
-                <Col>
-                    <div>Adres email: <span className='fw-bold'>abc@wp.pl</span></div>
-                </Col>
-                <Col className='text-end'>
-                    <h5>Informatyka Ekonomiczna</h5>
-                </Col>
-            </Row>
-            <Row className='w-100'>
-                <Col>
-                    <div>Numer telefonu: <span className='fw-bold'>123123123</span></div>
-                </Col>
-                <Col className='text-end'>
-                    <div>Planowana data ukończenia studiów: <span className='fw-bold'>30-10-2024</span></div>
-                </Col>
-            </Row>
-            <Row className='w-100 mt-3'>
-                <Col className='profile__border-bottom'>
-                    <h4>Sekcja #1</h4>
-                </Col>
-            </Row>
-            <Row className='w-100 my-4'>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>O mnie</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-                                mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
-                                expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque
-                                nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda
-                                est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut
-                                rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non
-                                recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis
-                                voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Doświadczenie zawodowe</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-                                mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
-                                expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque.
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-            <Row className='w-100 mt-3'>
-                <Col className='profile__border-bottom'>
-                    <h4>Sekcja #2</h4>
-                </Col>
-            </Row>
-            <Row className='w-100 my-4'>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Certyfikaty</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Praktyki</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-                                mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
-                                expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque.
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Kursy</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-                                mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
-                                expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque.
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-            <Row className='w-100 mt-3'>
-                <Col className='profile__border-bottom'>
-                    <h4>Sekcja #3</h4>
-                </Col>
-            </Row>
-            <Row className='w-100 my-4'>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title className='mb-3'>Znane technologie</Card.Title>
-                            <Accordion>
-                                {
-                                    technologies.map(technology => (
-                                        <Accordion.Item eventKey={technology.id.toString()}
-                                                        key={`technology_in_profile_${technology.id}`}>
-                                            <Accordion.Header>{technology.name}</Accordion.Header>
-                                            <Accordion.Body>
-                                                <span className='fw-bold fs-5'>W skali od 1 do 5 (1 - podstawowa, 5 - ekspercka), znajomość tej technologii oceniam na:</span>
-                                                <p className='py-2'>{technology.knowledge}</p>
-                                                <span className='fw-bold fs-5'>Moje umiejętności</span>
-                                                <p className='py-2'>
-                                                    {technology.description}
-                                                </p>
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                    ))
-                                }
-                            </Accordion>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-            <Row className='w-100 mt-3'>
-                <Col className='profile__border-bottom'>
-                    <h4>Sekcja #4</h4>
-                </Col>
-            </Row>
-            <Row className='w-100 ps-4 my-4'>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Języki obce</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                                occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Działalność studencka</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Card className='w-100'>
-                        <Card.Body>
-                            <Card.Title>Hobby i zainteresowania</Card.Title>
-                            <Card.Text>
-                                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
-                                voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Tab.Container>
+        <>
+            {message ? <Message message={message} title='Informacja' time={5000}/> : null}
+            <Tab.Container>
+                <Row className='w-100'>
+                    <Col>
+                        <h2>{studentData.first_name} {studentData.second_name}</h2>
+                    </Col>
+                    <Col className='text-end'>
+                        <h2>{studentData.student_data.university}</h2>
+                    </Col>
+                </Row>
+                <Row className='w-100'>
+                    <Col>
+                        <div>Adres email: <span className='fw-bold'>{studentData.email}</span></div>
+                    </Col>
+                    <Col className='text-end'>
+                        <h5>{studentData.student_data.field}</h5>
+                    </Col>
+                </Row>
+                <Row className='w-100'>
+                    <Col>
+                        <div>Numer telefonu: <span className='fw-bold'>{studentData.phone_number}</span></div>
+                    </Col>
+                    <Col className='text-end'>
+                        <div>Planowana data ukończenia studiów: <span
+                            className='fw-bold'>{studentData.student_data.expected_graduation_date.toString()}</span>
+                        </div>
+                    </Col>
+                </Row>
+                <Row className='w-100 mt-3'>
+                    <Col className='profile__border-bottom'>
+                        <h4>Sekcja #1</h4>
+                    </Col>
+                </Row>
+                <Row className='w-100 my-4'>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>O mnie</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.about}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Doświadczenie zawodowe</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.work_experience || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row className='w-100 mt-3'>
+                    <Col className='profile__border-bottom'>
+                        <h4>Sekcja #2</h4>
+                    </Col>
+                </Row>
+                <Row className='w-100 my-4'>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Certyfikaty</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.certificates || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Praktyki</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.practices || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Kursy</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.courses || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row className='w-100 mt-3'>
+                    <Col className='profile__border-bottom'>
+                        <h4>Sekcja #3</h4>
+                    </Col>
+                </Row>
+                <Row className='w-100 my-4'>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title className='mb-3'>Znane technologie</Card.Title>
+                                <Accordion>
+                                    {
+                                        technologies.length > 0 ?
+                                            technologies.map(technology => (
+                                                <Accordion.Item eventKey={technology.id.toString()}
+                                                                key={`technology_in_profile_${technology.id}`}>
+                                                    <Accordion.Header>{technology.technologies.name}</Accordion.Header>
+                                                    <Accordion.Body>
+                                                        <span className='fw-bold fs-5'>W skali od 1 do 5 (1 - podstawowa, 5 - ekspercka), znajomość tej technologii oceniam na:</span>
+                                                        <p className='py-2'>{technology.knowledge}</p>
+                                                        <span className='fw-bold fs-5'>Moje umiejętności</span>
+                                                        <p className='py-2'>
+                                                            {technology.skills}
+                                                        </p>
+                                                    </Accordion.Body>
+                                                </Accordion.Item>
+                                            )) : emptyField
+                                    }
+                                </Accordion>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row className='w-100 mt-3'>
+                    <Col className='profile__border-bottom'>
+                        <h4>Sekcja #4</h4>
+                    </Col>
+                </Row>
+                <Row className='w-100 ps-4 my-4'>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Języki obce</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.languages || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Działalność studencka</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.activities || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card className='w-100'>
+                            <Card.Body>
+                                <Card.Title>Hobby i zainteresowania</Card.Title>
+                                <Card.Text>
+                                    {studentData.student_data.hobby || emptyField}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Tab.Container>
+        </>
     )
 }
 

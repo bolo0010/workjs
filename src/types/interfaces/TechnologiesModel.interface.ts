@@ -1,4 +1,4 @@
-import { TechnologiesTypes } from "../enums";
+import {TechnologiesTypes} from "../enums";
 
 export interface TechnologiesModel {
     id: number,

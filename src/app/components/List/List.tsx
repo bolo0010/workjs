@@ -1,11 +1,13 @@
 import React, {useState} from "react";
 import {Button, Stack, Tab, Tabs} from "react-bootstrap";
 import MainList from "./MainList";
-import PrivateList from "./PrivateList";
 import {SelectedStudentInList} from "../../../types/interfaces";
 import StudentProfile from "../Profile/StudentProfile";
 import Projects from "../Profile/Projects";
 import './List.css';
+import {AccountType} from "../../../types/enums";
+import useReactRouteCheck from "../../hooks/useReactRouteCheck";
+import useLogout from "../../hooks/useLogout";
 
 const List = () => {
     const [selectedStudent, setSelectedStudent] = useState<SelectedStudentInList>({
@@ -14,6 +16,10 @@ const List = () => {
         second_name: ''
     })
     const [selectedTab, setSelectedTab] = useState<string>('main_list');
+    const [userId, setUserId] = useState<string | undefined>(undefined)
+
+    useReactRouteCheck(setUserId, AccountType.recruiter)
+    const logout = useLogout();
 
     const changeTab = (tab: string | null) => {
         setSelectedTab(tab ?? 'main_list')
@@ -31,18 +37,20 @@ const List = () => {
                     <Tab eventKey='main_list' title="Lista studentów" className='list__tab'>
                         <MainList setSelectedStudent={setSelectedStudent} changeTab={changeTab}/>
                     </Tab>
-                    <Tab eventKey='private_list' title="Moja lista" className='list__tab'>
-                        <PrivateList setSelectedStudent={setSelectedStudent} changeTab={changeTab}/>
-                    </Tab>
-                    <Tab eventKey='profile_student_in_list' title={`Profil ${selectedStudent.first_name} ${selectedStudent.second_name}`} className='list__tab' disabled={selectedStudent.id === ''}>
+                    <Tab eventKey='profile_student_in_list'
+                         title={`Profil ${selectedStudent.first_name} ${selectedStudent.second_name}`}
+                         className='list__tab' disabled={selectedStudent.id === ''}>
                         <StudentProfile id={selectedStudent.id}/>
                     </Tab>
-                    <Tab eventKey='student_projects_in_list' title={`Projekty ${selectedStudent.first_name} ${selectedStudent.second_name}`} className='list__tab' disabled={selectedStudent.id === ''}>
+                    <Tab eventKey='student_projects_in_list'
+                         title={`Projekty ${selectedStudent.first_name} ${selectedStudent.second_name}`}
+                         className='list__tab' disabled={selectedStudent.id === ''}>
                         <Projects id={selectedStudent.id}/>
                     </Tab>
                 </Tabs>
                 <Stack direction='horizontal' className='position-absolute top-0 end-0'>
-                    <Button className='profile__button btn-sm' variant="outline-primary">Wyloguj się</Button>
+                    <Button className='profile__button btn-sm' variant="outline-primary" onClick={logout}>Wyloguj
+                        się</Button>
                 </Stack>
             </Stack>
         </div>

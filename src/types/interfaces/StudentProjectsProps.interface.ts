@@ -1,3 +1,3 @@
 export interface StudentProjectsProps {
-    id: string;
+    id: string | undefined;
 }

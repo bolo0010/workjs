@@ -7,38 +7,42 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import Register from "./components/Home/Register";
 import Profile from "./components/Profile/Profile";
-import MainList from "./components/Lists/MainList";
-import List from "./components/Lists/List";
+import List from "./components/List/List";
+import {Session} from "./config/session";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Login />,
+        element: <Login/>,
     },
     {
         path: "/register",
-        element: <Register />,
+        element: <Register/>,
     },
     {
         path: "/list",
-        element: <List />,
+        element: <List/>,
     },
     {
         path: "/profile",
-        element: <Profile />,
+        element: <Profile/>,
     },
     {
         path: "/*",
-        element: <NotFound />,
+        element: <NotFound/>,
     },
 ]);
 
+(async () => {
+    await Session();
+})()
+
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
 root.render(
-  <React.StrictMode>
-      <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <RouterProvider router={router}/>
+    </React.StrictMode>
 );

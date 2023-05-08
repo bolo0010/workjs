@@ -1,6 +1,9 @@
 export interface TechnologyInProfile {
-    id: number
-    name: string
-    knowledge: number
-    description: string
+    id: number,
+    id_technology: number,
+    knowledge: number,
+    skills: string,
+    technologies: {
+        name: string
+    }
 }

@@ -13,7 +13,9 @@ import {
 import {Optional, UUIDV4} from "sequelize";
 import {RecruiterDataModel} from "../../../types/interfaces";
 
-interface RecruiterDataModelCreation extends Optional<RecruiterDataModel, 'id'> {}
+interface RecruiterDataModelCreation extends Optional<RecruiterDataModel, 'id'> {
+}
+
 @Table({
     freezeTableName: true,
     tableName: 'recruiter_data',
@@ -27,17 +29,17 @@ class RecruiterData extends Model<RecruiterDataModel, RecruiterDataModelCreation
     @Column(DataType.STRING)
     id!: string;
 
-    @Length({min:1, max: 200})
+    @Length({min: 1, max: 200})
     @AllowNull(false)
     @Column(DataType.STRING)
     organisation!: string;
 
-    @Length({min:1, max: 150})
+    @Length({min: 1, max: 150})
     @AllowNull(false)
     @Column(DataType.STRING)
     position!: string;
 
-    @Length({min:1, max: 2048})
+    @Length({min: 1, max: 2048})
     @AllowNull(false)
     @IsUrl
     @Column(DataType.STRING)

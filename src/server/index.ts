@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
-import express, { Express } from "express";
+import express, {Express} from "express";
 import cors from "cors";
 import DatabaseConnection from "./database/connection";
 import routes from "./api/routes";
+import passport from "passport";
+import {passportConfig} from "./config/passport";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -17,8 +20,14 @@ const app: Express = express();
     }
 })();
 
+app.use(cors({
+    origin: ['http://localhost:3000'],
+    credentials: true
+}));
+passportConfig(passport);
+app.use(passport.initialize());
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
 app.use('/api', routes);
 
 const port = process.env.PORT || 5000;
