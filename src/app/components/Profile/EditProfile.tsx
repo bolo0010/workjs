@@ -13,8 +13,11 @@ import './EditProfile.css'
 import axios, {AxiosResponse} from "axios";
 import {API_URL} from "../../config/api_url";
 import {EditProfileProps} from "../../../types/custom";
+import {useNavigate} from "react-router-dom";
 
 const EditProfile = ({showModal, handleClose, id}: EditProfileProps) => {
+    const navigate = useNavigate();
+
     const [technologies, setTechnologies] = useState<TechnologiesModel[]>([]);
     const [technologyData, setTechnologyData] = useState<TechnologyInProfile[]>([])
     const [joinedTechnologyData, setJoinedTechnology] = useState<JoinedTechnologyDataState[]>([])
@@ -138,6 +141,11 @@ const EditProfile = ({showModal, handleClose, id}: EditProfileProps) => {
                 window.location.reload();
             }
         } catch (err: any) {
+            if (err.response.status === 401) {
+                navigate('/', {state: {message: "Sesja wygasła lub nie została ustanowiona."}, replace: true});
+                sessionStorage.clear();
+                return;
+            }
             handleClose(err.response.data.message || err.message);
         }
     }

@@ -1,9 +1,9 @@
 import {Strategy, VerifiedCallback} from 'passport-jwt';
+import {Request} from "express";
+import {PassportStatic} from "passport";
 import fs from 'fs';
 import path from 'path';
 import Users from "../database/models/Users.model";
-import {Request} from "express";
-import {PassportStatic} from "passport";
 import {UserCookie} from "../../types/interfaces";
 
 const pathToKey = path.join(__dirname, '/../', 'keys', 'id_rsa_pub.pem');

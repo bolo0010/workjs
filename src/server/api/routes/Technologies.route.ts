@@ -1,4 +1,4 @@
-import {Router} from "express";
+import {Request, Response, Router} from "express";
 import Technologies from "../../database/models/Technologies.model";
 import passport from "passport";
 import StudentDataTechnologies from "../../database/models/StudentDataTechnologies.model";
@@ -8,7 +8,7 @@ import DatabaseConnection from "../../database/connection";
 export const technologies = Router();
 
 //get student technologies
-technologies.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+technologies.get('/:id', passport.authenticate('jwt', {session: false}), async (req: Request, res: Response) => {
     const {id} = req.params;
     try {
         const technologies = await StudentDataTechnologies.findAll({

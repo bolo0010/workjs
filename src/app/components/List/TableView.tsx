@@ -1,6 +1,8 @@
+// noinspection SpellCheckingInspection
+
+import React from "react";
 import Table from "react-bootstrap/Table";
 import {Button} from "react-bootstrap";
-import React from "react";
 import {TableViewProps} from "../../../types/interfaces";
 import './TableView.css';
 

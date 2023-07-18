@@ -127,7 +127,7 @@ const Register = () => {
                 url: `${API_URL}api/users`,
                 data: postData
             });
-            navigate('/', {state: {successful_register: "Zarejestrowano pomyślnie."}, replace: true});
+            navigate('/', {state: {message: "Zarejestrowano pomyślnie."}, replace: true});
         } catch (err: any) {
             setMessage(err.response.data.message || err.message);
             window.scrollTo(0, 0);

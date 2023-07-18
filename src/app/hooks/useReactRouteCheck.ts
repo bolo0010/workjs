@@ -1,10 +1,10 @@
 import {useEffect} from "react";
-import {AccountType} from "../../types/enums";
 import {useNavigate} from "react-router-dom";
+import {UseReactRouteCheckProps} from "../../types/interfaces";
 
-const useReactRouteCheck = (setUserId: (value: (((prevState: string | undefined) => string | undefined) | string | undefined)) => void, accountType: AccountType) => {
+const useReactRouteCheck = ({setUserId, accountType}: UseReactRouteCheckProps) => {
     const navigate = useNavigate();
-    const navigateToLogin = () => navigate('/', {
+        const navigateToLogin = () => navigate('/', {
         state: {message: "Nie posiadasz uprawnień do przeglądania tej podstrony."},
         replace: true
     });
@@ -14,12 +14,12 @@ const useReactRouteCheck = (setUserId: (value: (((prevState: string | undefined)
         const user = sessionStorage.getItem('user');
         if (!user) {
             navigateToLogin();
-            return
+            return;
         }
         const {account_type, id} = JSON.parse(user);
         if (account_type !== accountType) {
             navigateToLogin();
-            return
+            return;
         } else setUserId(id);
     }, [])
 }

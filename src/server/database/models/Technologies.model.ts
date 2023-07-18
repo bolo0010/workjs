@@ -1,10 +1,9 @@
-import {AllowNull, AutoIncrement, Column, DataType, Length, Model, PrimaryKey, Table} from 'sequelize-typescript';
 import {ENUM, Optional} from "sequelize";
+import {AllowNull, Column, DataType, Length, Model, PrimaryKey, Table} from 'sequelize-typescript';
 import {TechnologiesModel} from "../../../types/interfaces";
 import {TechnologiesTypes} from "../../../types/enums";
 
-interface TechnologiesModelCreation extends Optional<TechnologiesModel, 'id'> {
-}
+interface TechnologiesModelCreation extends Optional<TechnologiesModel, 'id'> {}
 
 @Table({
     freezeTableName: true,
@@ -14,7 +13,6 @@ interface TechnologiesModelCreation extends Optional<TechnologiesModel, 'id'> {
 class Technologies extends Model<TechnologiesModelCreation, TechnologiesModel> {
     @PrimaryKey
     @AllowNull(false)
-    @AutoIncrement
     @Column(DataType.INTEGER)
     id!: number;
 
@@ -24,7 +22,8 @@ class Technologies extends Model<TechnologiesModelCreation, TechnologiesModel> {
     name!: string;
 
     @AllowNull(false)
-    @Column(ENUM<TechnologiesTypes>(TechnologiesTypes.framework, TechnologiesTypes.library, TechnologiesTypes.other))
+    @Column(ENUM<TechnologiesTypes>(TechnologiesTypes.framework,
+            TechnologiesTypes.library, TechnologiesTypes.other))
     type!: TechnologiesTypes;
 }
 

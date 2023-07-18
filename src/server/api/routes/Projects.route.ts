@@ -1,4 +1,4 @@
-import {Router} from "express";
+import {Request, Response, Router} from "express";
 import passport from "passport";
 import {ProjectData} from "../../../types/custom";
 import Projects from "../../database/models/Projects.model";
@@ -6,7 +6,7 @@ import Projects from "../../database/models/Projects.model";
 export const projects = Router();
 
 //create new project
-projects.post('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
+projects.post('/', passport.authenticate('jwt', {session: false}), async (req: Request, res: Response) => {
     const {
         name,
         description,
@@ -16,14 +16,19 @@ projects.post('/', passport.authenticate('jwt', {session: false}), async (req, r
 
     const {sub} = req.user as { sub: string }
 
-    if (!name || !description || !demo_link || !dev_link) return res.status(400).json({
+    if (!name || !description || !demo_link || !dev_link)
+        return res.status(400).json({
         success: false,
         message: 'Uzupełnij wszystkie pola.'
-    });
+        });
 
     try {
         await Projects.create({
-            name, description, demo_link, dev_link, id_student: sub
+            name,
+            description,
+            demo_link,
+            dev_link,
+            id_student: sub
         })
         res.status(200).json({
             success: true,

@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
+import {UseMessageTimeoutProps} from "../../types/interfaces";
 
-const useMessageTimeout = (setShow: (value: (((prevState: boolean) => boolean) | boolean)) => void, message: string, time: number) => {
+const useMessageTimeout = ({setShow, message, time}: UseMessageTimeoutProps) => {
     useEffect(() => {
         if (!message) {
             setShow(false);

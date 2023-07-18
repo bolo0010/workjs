@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Stack, Tab, Tabs} from "react-bootstrap";
 import MainList from "./MainList";
 import {SelectedStudentInList} from "../../../types/interfaces";
@@ -8,8 +8,12 @@ import './List.css';
 import {AccountType} from "../../../types/enums";
 import useReactRouteCheck from "../../hooks/useReactRouteCheck";
 import useLogout from "../../hooks/useLogout";
+import {Session} from "../../config/session";
+import {useNavigate} from "react-router-dom";
 
 const List = () => {
+    const navigate = useNavigate();
+
     const [selectedStudent, setSelectedStudent] = useState<SelectedStudentInList>({
         id: '',
         first_name: '',
@@ -18,7 +22,15 @@ const List = () => {
     const [selectedTab, setSelectedTab] = useState<string>('main_list');
     const [userId, setUserId] = useState<string | undefined>(undefined)
 
-    useReactRouteCheck(setUserId, AccountType.recruiter)
+    useEffect(() => {
+        const promise = Session();
+        promise.catch(() => {
+            navigate('/', {state: {message: "Sesja wygasła lub nie została ustanowiona."}, replace: true});
+            sessionStorage.clear();
+        })
+    }, []);
+
+    useReactRouteCheck({setUserId, accountType: AccountType.recruiter})
     const logout = useLogout();
 
     const changeTab = (tab: string | null) => {

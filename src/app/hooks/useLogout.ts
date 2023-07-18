@@ -18,6 +18,7 @@ const useLogout = () => {
             }
         } catch (err) {
             console.error(err);
+            navigate('/', {state: {message: "Sesja wygasła."}, replace: true});
         }
     }
 }

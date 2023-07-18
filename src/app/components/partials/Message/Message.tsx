@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import Toast from 'react-bootstrap/Toast';
-import {MessageProps} from "../../../../types/interfaces";
 import {ToastContainer} from "react-bootstrap";
 import useMessageTimeout from "../../../hooks/useMessageTimeout";
+import {MessageProps} from "../../../../types/interfaces";
 
 const Message = ({title, message, time}: MessageProps) => {
     const [show, setShow] = useState(true);
-    useMessageTimeout(setShow, message, time);
+    useMessageTimeout({setShow, message, time});
 
     return (
         <ToastContainer

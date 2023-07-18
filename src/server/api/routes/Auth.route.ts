@@ -65,7 +65,7 @@ auth.get('/logout', passport.authenticate('jwt', {session: false}), async (req: 
 
 //get user session data
 auth.get('/session', passport.authenticate('jwt', {session: false}), async (req: Request, res: Response) => {
-    if (!req.user) return res.status(401).json({success: false, message: 'Sesja wygasła.'});
+    if (!req.user) return res.status(401).json({success: false, message: 'Sesja wygasła lub nie została ustanowiona.'});
 
     try {
         const user: SecureUserModel | null = await Users.findOne({

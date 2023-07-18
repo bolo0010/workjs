@@ -6,8 +6,11 @@ import './AddProject.css'
 import {ProjectData} from "../../../types/custom";
 import axios, {AxiosResponse} from "axios";
 import {API_URL} from "../../config/api_url";
+import {useNavigate} from "react-router-dom";
 
 const AddProject = ({showModal, handleClose}: ModalProps) => {
+    const navigate = useNavigate();
+
     const [projectData, setProjectData] = useState<ProjectData>({
         name: "",
         description: "",
@@ -33,6 +36,11 @@ const AddProject = ({showModal, handleClose}: ModalProps) => {
             handleClose(response.data.message);
             window.location.reload();
         } catch (err: any) {
+            if (err.response.status === 401) {
+                navigate('/', {state: {message: "Sesja wygasła lub nie została ustanowiona."}, replace: true});
+                sessionStorage.clear();
+                return;
+            }
             handleClose(err.response.data.message || err.message);
         }
     }

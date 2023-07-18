@@ -15,6 +15,7 @@ const DatabaseConnection: Sequelize = new Sequelize({
     database: process.env.DB_DATABASE,
     port: 3306,
     dialect: 'mysql',
-    models: [Projects, RecruiterData, StudentData, StudentDataTechnologies, Technologies, Users],
+    models: [Projects, RecruiterData, StudentData,
+        StudentDataTechnologies, Technologies, Users],
 });
 export default DatabaseConnection;

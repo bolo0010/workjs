@@ -15,8 +15,7 @@ import {Optional, UUIDV4} from "sequelize";
 import Users from "./Users.model";
 import {ProjectsModel} from "../../../types/interfaces";
 
-interface ProjectsModelCreation extends Optional<ProjectsModel, 'id'> {
-}
+interface ProjectsModelCreation extends Optional<ProjectsModel, 'id'> {}
 
 @Table({
     freezeTableName: true,

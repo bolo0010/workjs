@@ -8,7 +8,6 @@ import './index.css';
 import Register from "./components/Home/Register";
 import Profile from "./components/Profile/Profile";
 import List from "./components/List/List";
-import {Session} from "./config/session";
 
 const router = createBrowserRouter([
     {
@@ -32,10 +31,6 @@ const router = createBrowserRouter([
         element: <NotFound/>,
     },
 ]);
-
-(async () => {
-    await Session();
-})()
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
