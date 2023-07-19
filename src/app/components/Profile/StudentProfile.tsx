@@ -5,7 +5,7 @@ import Message from "../partials/Message/Message";
 import axios, {AxiosResponse} from "axios";
 import {API_URL} from "../../config/api_url";
 
-const StudentProfile = ({id}: StudentProfileProps) => {
+const StudentProfile = ({id, changed}: StudentProfileProps) => {
     const [technologies, setTechnologies] = useState<TechnologyInProfile[]>([]);
     const [studentData, setStudentData] = useState<StudentProfileData>({
         first_name: '',
@@ -32,7 +32,7 @@ const StudentProfile = ({id}: StudentProfileProps) => {
 
     useEffect(() => {
         getStudentProfile()
-    }, [id])
+    }, [id, changed])
 
     useEffect(() => {
         getStudentTechnologies();
@@ -77,7 +77,7 @@ const StudentProfile = ({id}: StudentProfileProps) => {
 
     return (
         <>
-            {message ? <Message message={message} title='Informacja' time={5000}/> : null}
+            {message ? <Message message={message} setMessage={setMessage} title='Informacja' time={5000}/> : null}
             <Tab.Container>
                 <Row className='w-100'>
                     <Col>

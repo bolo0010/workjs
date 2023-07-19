@@ -21,7 +21,7 @@ const app: Express = express();
 })();
 
 app.use(cors({
-    origin: ['https://work.arturmaslowski.pl/'],
+    origin: ['http://localhost:3000'],
     credentials: true
 }));
 passportConfig(passport);

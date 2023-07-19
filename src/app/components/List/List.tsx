@@ -52,12 +52,12 @@ const List = () => {
                     <Tab eventKey='profile_student_in_list'
                          title={`Profil ${selectedStudent.first_name} ${selectedStudent.second_name}`}
                          className='list__tab' disabled={selectedStudent.id === ''}>
-                        <StudentProfile id={selectedStudent.id}/>
+                        <StudentProfile id={selectedStudent.id} changed={false}/>
                     </Tab>
                     <Tab eventKey='student_projects_in_list'
                          title={`Projekty ${selectedStudent.first_name} ${selectedStudent.second_name}`}
                          className='list__tab' disabled={selectedStudent.id === ''}>
-                        <Projects id={selectedStudent.id}/>
+                        <Projects id={selectedStudent.id} changed={false}/>
                     </Tab>
                 </Tabs>
                 <Stack direction='horizontal' className='position-absolute top-0 end-0'>

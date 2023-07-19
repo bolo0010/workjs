@@ -17,6 +17,8 @@ const Profile = () => {
 
     const [showModalAddProject, setShowModalAddProject] = useState<boolean>(false);
     const [showModalEditProfile, setShowModalEditProfile] = useState<boolean>(false);
+    const [studentProfileChanged, setStudentProfileChanged] = useState<boolean>(false);
+    const [projectsChanged, setProjectsChanged] = useState<boolean>(false);
     const [userId, setUserId] = useState<string | undefined>(undefined)
     const [message, setMessage] = useState<string>('');
 
@@ -43,11 +45,19 @@ const Profile = () => {
 
     return (
         <>
-            {message ? <Message message={message} title='Informacja' time={5000}/> : null}
+            {message ? <Message message={message} setMessage={setMessage} title='Informacja' time={5000}/> : null}
             <div className="profile">
-                <AddProject showModal={showModalAddProject} handleClose={handleCloseModalAddProject}/>
-                <EditProfile showModal={showModalEditProfile} handleClose={handleCloseModalEditProfile}
-                             id={userId as string}/>
+                <AddProject showModal={showModalAddProject}
+                            handleClose={handleCloseModalAddProject}
+                            changed={projectsChanged}
+                            setChanged={setProjectsChanged}
+                />
+                <EditProfile showModal={showModalEditProfile}
+                             handleClose={handleCloseModalEditProfile}
+                             id={userId as string}
+                             changed={studentProfileChanged}
+                             setChanged={setStudentProfileChanged}
+                />
                 <Stack direction='vertical'>
                     <Tabs
                         defaultActiveKey="profile"
@@ -55,10 +65,10 @@ const Profile = () => {
                         className="mb-3 w-100"
                     >
                         <Tab eventKey="profile" title="Profil" className='profile__tab'>
-                            <StudentProfile id={userId}/>
+                            <StudentProfile id={userId} changed={studentProfileChanged}/>
                         </Tab>
                         <Tab eventKey="projects" title="Projekty" className='profile__tab'>
-                            <Projects id={userId}/>
+                            <Projects id={userId} changed={projectsChanged}/>
                         </Tab>
                     </Tabs>
                     <Stack direction='horizontal' className='position-absolute top-0 end-0'>

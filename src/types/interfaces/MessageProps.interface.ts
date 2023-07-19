@@ -1,5 +1,6 @@
 export interface MessageProps {
     title: string,
     message: string
-    time: number
+    time: number,
+    setMessage: (value: (((prevState: string) => string) | string)) => void,
 }

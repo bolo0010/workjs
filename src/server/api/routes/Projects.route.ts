@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import passport from "passport";
 import {ProjectData} from "../../../types/custom";
 import Projects from "../../database/models/Projects.model";
+import {Op} from "sequelize";
 
 export const projects = Router();
 
@@ -62,3 +63,29 @@ projects.post('/', passport.authenticate('jwt', {session: false}), async (req: R
             });
         }
     })
+    //delete project
+    .delete('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+        const {id} = req.params;
+        const {sub} = req.user as { sub: string }
+
+        try {
+            await Projects.destroy({
+                where: {
+                    [Op.and]: [
+                        { id },
+                        { id_student: sub }
+                    ]
+                }
+            })
+            res.status(200).json({
+                success: true,
+                message: 'Projekt został usunięty.'
+            });
+        } catch (error: any) {
+            console.error(error.message);
+            res.status(500).json({
+                success: false,
+                message: 'Wystąpił błąd, spróbuj ponownie później.'
+            });
+        }
+    });

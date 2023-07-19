@@ -1,14 +1,14 @@
 import Modal from "react-bootstrap/esm/Modal";
 import {Button, Container, Form} from "react-bootstrap";
 import {ModalProps, ResponseMessage} from "../../../types/interfaces";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import './AddProject.css'
-import {ProjectData} from "../../../types/custom";
+import {AddProjectProps, ProjectData} from "../../../types/custom";
 import axios, {AxiosResponse} from "axios";
 import {API_URL} from "../../config/api_url";
 import {useNavigate} from "react-router-dom";
 
-const AddProject = ({showModal, handleClose}: ModalProps) => {
+const AddProject = ({showModal, handleClose, changed, setChanged}: AddProjectProps) => {
     const navigate = useNavigate();
 
     const [projectData, setProjectData] = useState<ProjectData>({
@@ -17,6 +17,10 @@ const AddProject = ({showModal, handleClose}: ModalProps) => {
         demo_link: "",
         dev_link: ""
     });
+
+    useEffect(() => {
+        setChanged(false);
+    }, [changed])
 
     const formSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -34,7 +38,7 @@ const AddProject = ({showModal, handleClose}: ModalProps) => {
                 dev_link: ""
             })
             handleClose(response.data.message);
-            window.location.reload();
+            setChanged(true);
         } catch (err: any) {
             if (err.response.status === 401) {
                 navigate('/', {state: {message: "Sesja wygasła lub nie została ustanowiona."}, replace: true});

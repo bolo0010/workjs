@@ -15,7 +15,7 @@ import {API_URL} from "../../config/api_url";
 import {EditProfileProps} from "../../../types/custom";
 import {useNavigate} from "react-router-dom";
 
-const EditProfile = ({showModal, handleClose, id}: EditProfileProps) => {
+const EditProfile = ({showModal, handleClose, id, setChanged, changed}: EditProfileProps) => {
     const navigate = useNavigate();
 
     const [technologies, setTechnologies] = useState<TechnologiesModel[]>([]);
@@ -41,6 +41,10 @@ const EditProfile = ({showModal, handleClose, id}: EditProfileProps) => {
             expected_graduation_date: new Date()
         }
     })
+
+    useEffect(() => {
+        setChanged(false);
+    }, [changed])
 
     useEffect(() => {
         getStudentData();
@@ -138,7 +142,7 @@ const EditProfile = ({showModal, handleClose, id}: EditProfileProps) => {
             });
             if (first_response.data.success && second_response.data.success) {
                 handleClose(first_response.data.message);
-                window.location.reload();
+                setChanged(true);
             }
         } catch (err: any) {
             if (err.response.status === 401) {

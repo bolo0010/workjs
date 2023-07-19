@@ -1,1 +1,1 @@
-export const API_URL = "https://work.arturmaslowski.pl/"
+export const API_URL = "http://localhost:5000/"

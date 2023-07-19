@@ -140,7 +140,7 @@ const Register = () => {
     )
     return (
         <>
-            {message ? <Message message={message} title='Informacja' time={5000}/> : null}
+            {message ? <Message message={message} setMessage={setMessage} title='Informacja' time={5000}/> : null}
             <div className="register">
                 <Form onSubmit={postUser}>
                     <h2>1. Podstawowe dane</h2>

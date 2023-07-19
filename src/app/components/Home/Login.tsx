@@ -46,13 +46,14 @@ const Login = () => {
                 else if (account_type === AccountType.recruiter) navigate('/list', {replace: true});
             }
         } catch (err: any) {
+            console.log(err.message);
             setMessage(err.response.data.message || err.message);
         }
     }
 
     return (
         <>
-            {message ? <Message message={message} title='Informacja' time={5000}/> : null}
+            {message ? <Message message={message} title='Informacja' time={5000} setMessage={setMessage}/> : null}
             <div className="form">
                 <Form onSubmit={getLogin}>
                     <Form.Group className="mb-3" controlId="formLoginEmail">
