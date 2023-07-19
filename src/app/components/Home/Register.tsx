@@ -144,7 +144,7 @@ const Register = () => {
             <div className="register">
                 <Form onSubmit={postUser}>
                     <h2>1. Podstawowe dane</h2>
-                    <Stack direction="horizontal" gap={3}>
+                    <Stack className="register__stack-1" >
                         <Form.Group className="mb-3" controlId="formFirstName">
                             <Form.Label className="fs-4">Imię{requiredInput}</Form.Label>
                             <Form.Control type="text" placeholder="Jan" required={true}

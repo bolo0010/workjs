@@ -1,13 +1,30 @@
 .profile__button {
     width: 125px;
-    margin: 5px;
+    margin: 3px;
+    font-size: 1rem;
 }
 
 .profile__border-bottom {
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid #d2d2d2;
 }
 
-.profile__tab {
-    width: 95%;
+.profile__dropdown {
+    margin: 5px;
+}
+
+.profile__dropdown > button {
+    width: 100px;
+}
+
+/*bootstrap class*/
+.tab-content {
+    width: 100%;
     margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .tab-content {
+        width: 98%;
+    }
 }

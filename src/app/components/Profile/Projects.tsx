@@ -69,43 +69,45 @@ const Projects = ({id, changed}: StudentProjectsProps) => {
                    text={'Czy chcesz usunąć ten projekt?'}/>
             <div className="projects">
                 <Tab.Container>
-                    <Row className='w-100'>
-                        <Col>
-                            <h2>Moje projekty</h2>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            {
-                                projects.length > 0 ?
-                                    projects.map(project => (
-                                        <Card className='w-100 my-3' key={`project_in_profile_${project.id}`}>
-                                            <Card.Body>
-                                                <div className="d-flex justify-content-between">
-                                                    <Card.Title>{project.name}</Card.Title>
-                                                    {
-                                                        accountType === AccountType.student ?
-                                                            <button className='btn-close'
-                                                                    onClick={() => {
-                                                                        setDeletingProjectId(project.id);
-                                                                        setShowYesNoModal(true);
-                                                                    }
-                                                                    }></button> : null
-                                                    }
-                                                </div>
-                                                <Card.Text>
-                                                    {project.description}
-                                                </Card.Text>
-                                                <Card.Link href={project.demo_link} target='_blank'>Wersja
-                                                    demonstracyjna</Card.Link>
-                                                <Card.Link href={project.dev_link}
-                                                           target='_blank'>Repozytorium</Card.Link>
-                                            </Card.Body>
-                                        </Card>
-                                    )) : null
-                            }
-                        </Col>
-                    </Row>
+                    <Tab.Content>
+                        <Row className='w-100 mx-0'>
+                            <Col>
+                                <h2>Moje projekty</h2>
+                            </Col>
+                        </Row>
+                        <Row className='w-100 mx-0'>
+                            <Col>
+                                {
+                                    projects.length > 0 ?
+                                        projects.map(project => (
+                                            <Card className='w-100 my-3' key={`project_in_profile_${project.id}`}>
+                                                <Card.Body>
+                                                    <div className="d-flex justify-content-between">
+                                                        <Card.Title>{project.name}</Card.Title>
+                                                        {
+                                                            accountType === AccountType.student ?
+                                                                <button className='btn-close'
+                                                                        onClick={() => {
+                                                                            setDeletingProjectId(project.id);
+                                                                            setShowYesNoModal(true);
+                                                                        }
+                                                                        }></button> : null
+                                                        }
+                                                    </div>
+                                                    <Card.Text>
+                                                        {project.description}
+                                                    </Card.Text>
+                                                    <Card.Link href={project.demo_link} target='_blank'>Wersja
+                                                        demonstracyjna</Card.Link>
+                                                    <Card.Link href={project.dev_link}
+                                                               target='_blank'>Repozytorium</Card.Link>
+                                                </Card.Body>
+                                            </Card>
+                                        )) : null
+                                }
+                            </Col>
+                        </Row>
+                    </Tab.Content>
                 </Tab.Container>
             </div>
         </>

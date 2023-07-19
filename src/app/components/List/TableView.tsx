@@ -8,14 +8,14 @@ import './TableView.css';
 
 const TableView = ({student_list, list_type, setSelectedStudent, changeTab}: TableViewProps) => {
     return (
-        <Table striped bordered hover className='mx-auto my-3 table-view'>
+        <Table striped bordered hover responsive className='mx-auto my-3 table-view'>
             <thead>
             <tr>
                 <th>Imię</th>
                 <th>Nazwisko</th>
                 <th>Uczelnia</th>
                 <th>Kierunek</th>
-                <th>Ilość projektów</th>
+                <th>Liczba projektów</th>
                 <th>Znane technologie</th>
                 <th>Akcje</th>
             </tr>
@@ -33,7 +33,7 @@ const TableView = ({student_list, list_type, setSelectedStudent, changeTab}: Tab
                                 <td>{student.technologies.map((technology, i, row) =>
                                     i + 1 === row.length ? technology : technology + ', '
                                 )}</td>
-                                <td>
+                                <td className='align-middle'>
                                     <Button className='btn-sm me-1' variant="primary" onClick={() => {
                                         setSelectedStudent({
                                             id: student.id,
@@ -41,7 +41,7 @@ const TableView = ({student_list, list_type, setSelectedStudent, changeTab}: Tab
                                             second_name: student.second_name
                                         })
                                         changeTab('profile_student_in_list')
-                                    }}>Wyświetl profil</Button>
+                                    }}>Wyświetl</Button>
                                 </td>
                             </tr>
                         )

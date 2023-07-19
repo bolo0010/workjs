@@ -41,3 +41,18 @@
 .register__required {
     color: red;
 }
+
+.register__stack-1 {
+    flex-direction: column;
+}
+
+@media (min-width: 768px) {
+    .register__stack-1 {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    .register__stack-1 > div {
+        width: 100%;
+    }
+}

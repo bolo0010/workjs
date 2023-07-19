@@ -45,8 +45,11 @@ const MainList = ({setSelectedStudent, changeTab}: MainListProps) => {
         <>
             {message ? <Message message={message} setMessage={setMessage} title='Informacja' time={5000}/> : null}
             <div className="main-list">
-                <TableView student_list={studentList} list_type={ListType.main} setSelectedStudent={setSelectedStudent}
-                           changeTab={changeTab}/>
+                <TableView student_list={studentList}
+                           list_type={ListType.main}
+                           setSelectedStudent={setSelectedStudent}
+                           changeTab={changeTab}
+                />
             </div>
         </>
     );
