@@ -55,6 +55,7 @@ const Login = () => {
         <>
             {message ? <Message message={message} title='Informacja' time={5000} setMessage={setMessage}/> : null}
             <div className="form">
+                <h3 className='border-bottom pb-3'>Zaloguj się do aplikacji</h3>
                 <Form onSubmit={getLogin}>
                     <Form.Group className="mb-3" controlId="formLoginEmail">
                         <Form.Label column="lg">Adres Email</Form.Label>
