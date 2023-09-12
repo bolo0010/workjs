@@ -65,18 +65,12 @@ Install dependencies
   npm install
 ```
 
-Set variables in .env file
-
-```bash
-  npm install
-```
-
 Change _origin_ property to localhost in `index.ts` file and change _API_URL_ variable to localhost in `api_url.ts`
 
 ```diff
 app.use(cors({
-    - origin: ['https://work.arturmaslowski.pl/'],
-    + origin: ['http://localhost:8080/'],
+-     origin: ['https://work.arturmaslowski.pl/'],
++     origin: ['http://localhost:8080/'],
       credentials: true
 }));
 ```
