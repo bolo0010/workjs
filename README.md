@@ -45,6 +45,11 @@ To run this project, you will need to add the following environment variables to
 `DB_DATABASE`
 `DB_USERNAME`
 `DB_PASS`
+
+## Database
+
+Use the `database.sql` file to recreate the database
+
 ## Run Locally
 
 Clone the project
