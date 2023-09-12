@@ -52,7 +52,7 @@ Use the `database.sql` file to recreate the database
 
 ## Keys
 
-Create folder keys in `src/server` and generate public and private keys:  
+Create folder `keys` in `src/server` and generate public and private keys:  
 `id_rsa_priv.pem`  
 `id_rsa_pub.pem`  
 
