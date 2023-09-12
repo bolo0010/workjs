@@ -50,6 +50,14 @@ To run this project, you will need to add the following environment variables to
 
 Use the `database.sql` file to recreate the database
 
+## Keys
+
+Create folder keys in `src/server` and generate public and private keys:  
+`id_rsa_priv.pem`  
+`id_rsa_pub.pem`  
+
+Algorithm: `RS256`
+
 ## Run Locally
 
 Clone the project
